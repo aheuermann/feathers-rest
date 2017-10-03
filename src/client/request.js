@@ -10,11 +10,13 @@ export default class Service extends Base {
           return reject(error);
         }
 
-        if (!error && res.statusCode >= 400) {
+        const statusCode = res.statusCode;
+        if (!error && statusCode >= 400) {
           if (typeof data === 'string') {
             return reject(new Error(data));
           }
-
+          data = data || {};
+          data.statusCode = statusCode;
           data.response = res;
 
           return reject(Object.assign(new Error(data.message), data));
